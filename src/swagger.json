@@ -1,0 +1,103 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Document ByCoders",
+    "description": "Document ByCoders",
+    "version": "1.0.0",
+    "contact": {
+      "email": "evertonsdsilva@gmail.com"
+    }
+  },
+  "paths": {
+    "/v1/transaction": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Create Transactions",
+        "description": "Create Transactions",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "transaction_type": {
+                    "type": "number"
+                  },
+                  "date_occurrence": {
+                    "type": "string"
+                  },
+                  "movement_value": {
+                    "type": "number"
+                  },
+                  "card": {
+                    "type": "string"
+                  },
+                  "time_occurrence": {
+                    "type": "string"
+                  },
+                  "cpf": {
+                    "type": "string"
+                  },
+                  "owner": {
+                    "type": "string"
+                  },
+                  "store_name": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "owner": "Eu",
+                  "transaction_type": 1,
+                  "date_occurrence": "2013-09-29T18:46:19Z",
+                  "card": "1234",
+                  "time_occurrence": "2013-09-29T18:46:19Z",
+                  "cpf": "2828848484",
+                  "store_name": "jdjdjd",
+                  "movement_value": 0.1
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/v1/transaction/upload": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Create many transactions",
+        "description": "Create many transactions",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User enabled for registration"
+          },
+          "500": {
+            "description": "User already exists"
+          }
+        }
+      }
+    }
+  }
+}

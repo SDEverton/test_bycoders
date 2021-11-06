@@ -1,0 +1,40 @@
+scalar Date
+scalar Upload
+
+type File {
+  filename: String
+  mimetype: String
+  encoding: String
+}
+
+type Transactions {
+  id: String
+  transaction_type: Int
+  date_occurrence: Date
+  movement_value: Float
+  card: String
+  time_occurrence: Date
+  cpf: String
+  owner: String
+  store_name: String
+}
+
+type Query {
+  getAllTransactions: [Transactions]
+}
+
+input TransactionsInput {
+  transaction_type: Int
+  date_occurrence: Date
+  movement_value: Float
+  card: String
+  time_occurrence: Date
+  cpf: String
+  owner: String
+  store_name: String
+}
+
+type Mutation {
+  createTransaction(input: TransactionsInput): Transactions
+  uploadCreate(file: Upload!): File
+}
