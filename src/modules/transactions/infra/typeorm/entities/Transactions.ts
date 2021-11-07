@@ -4,7 +4,7 @@ import { v4 as uuidV4 } from 'uuid';
 @Entity('transactions')
 class Transactions {
   @PrimaryColumn()
-  id: string;
+  id?: string;
 
   @Column()
   transaction_type: number;

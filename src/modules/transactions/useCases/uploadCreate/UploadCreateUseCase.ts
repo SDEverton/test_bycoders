@@ -5,6 +5,7 @@ import { inject, injectable } from 'tsyringe';
 import { ITransactionsDTO } from '@modules/transactions/dtos/ITransactionsDTO';
 import { ITransactionsRepository } from '@modules/transactions/repositories/ITransactionsRepository';
 import { IStorageProvider } from '@shared/container/providers/StorageProvider/IStoragePovider';
+import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 class UploadCreateUseCase {
@@ -16,7 +17,12 @@ class UploadCreateUseCase {
   ) {}
   async execute(file: string): Promise<ITransactionsDTO[]> {
     const arrayInformation = [];
-    await this.storageProvider.save(file, 'files');
+
+    try {
+      await this.storageProvider.save(file, 'files');
+    } catch (error) {
+      throw new AppError('Error read file!');
+    }
 
     const transactionReadStream = fs.readFileSync(
       await this.storageProvider.find(file, 'files')
