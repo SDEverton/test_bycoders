@@ -7,6 +7,18 @@ import { ITransactionsRepository } from '@modules/transactions/repositories/ITra
 import { IStorageProvider } from '@shared/container/providers/StorageProvider/IStoragePovider';
 import { AppError } from '@shared/errors/AppError';
 
+interface IResponse {
+  id?: string;
+  transaction_type: string;
+  date_occurrence: Date;
+  movement_value: number;
+  card: string;
+  time_occurrence: Date;
+  cpf: string;
+  owner: string;
+  store_name: string;
+}
+
 @injectable()
 class UploadCreateUseCase {
   constructor(
@@ -15,7 +27,7 @@ class UploadCreateUseCase {
     @inject('StorageProvider')
     private storageProvider: IStorageProvider
   ) {}
-  async execute(file: string): Promise<ITransactionsDTO[]> {
+  async execute(file: string): Promise<IResponse[]> {
     const arrayInformation = [];
 
     try {
@@ -69,7 +81,33 @@ class UploadCreateUseCase {
     await this.userRepository.bulkCreate(arrayInformation);
     await this.storageProvider.delete(file, 'files');
 
-    return arrayInformation;
+    const options = (item: number) =>
+      ({
+        1: 'Débito +',
+        2: 'Boleto -',
+        3: 'Financiamento -',
+        4: 'Crédito +',
+        5: 'Recebimento Empréstimo +',
+        6: 'Vendas +',
+        7: 'Recebimento TED +',
+        8: 'Recebimento DOC +',
+        9: 'Aluguel -',
+      }[item] || 'generic error');
+
+    const response = arrayInformation.map((item: ITransactionsDTO) => {
+      return {
+        transaction_type: options(item.transaction_type),
+        date_occurrence: item.date_occurrence,
+        movement_value: item.movement_value,
+        cpf: item.cpf,
+        card: item.card,
+        time_occurrence: item.time_occurrence,
+        owner: item.owner,
+        store_name: item.store_name,
+      };
+    });
+
+    return response;
   }
 }
 
